@@ -1,9 +1,5 @@
 #!/bin/bash
 
-compiled_resources=(
-  render/shaders/*.glsl
-)
-
 # redirect all stdout to stderr
 exec 1>&2
 
@@ -18,10 +14,6 @@ if [ -z "$target" ]; then target="client"; fi
 if [ "$target" = "clean" ]; then
   echo "Cleaning build directory \"$build_dir\"..."
   rm -r "$build_dir"
-  echo "Cleaning ${#compiled_resources[@]} compiled resources..."
-  for file in "${compiled_resources[@]}"; do
-    rm "${file}.h"
-  done
   target="client"
 fi
 
@@ -32,18 +24,6 @@ if [ ! -d "$build_dir" ]; then
   echo "Creating build directory \"$build_dir\"..."
   mkdir "$build_dir"
 fi
-
-# compile resources
-compiled_resources_total=0
-compiled_resources_up_to_date=0
-for file in "${compiled_resources[@]}"; do
-  ((++compiled_resources_total))
-  result=$(./compile_resource_to_raw_string.sh "$file")
-  if grep -Fq "up to date" <<< "$result"; then
-    ((++compiled_resources_up_to_date))
-  fi
-done
-echo "Compiled resources: $((compiled_resources_total - compiled_resources_up_to_date)) updated, $compiled_resources_up_to_date up to date ($compiled_resources_total total)"
 
 cd "$build_dir"
 
