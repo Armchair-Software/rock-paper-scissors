@@ -101,6 +101,7 @@ add_executable(client
   gui/draw_stats_window.cpp
   gui/gui.cpp
   main.cpp
+  render/texture_manager.cpp
   render/window.cpp
   # shared libraries:
   get_version.cpp
@@ -199,7 +200,7 @@ target_link_options(client PRIVATE
   -sENVIRONMENT=web
   --shell-file=${CMAKE_SOURCE_DIR}/html/client.html
   # embedded files
-  #--preload-file ../assets@/
+  --preload-file ../assets@/
 )
 
 set(CMAKE_EXECUTABLE_SUFFIX ".html")

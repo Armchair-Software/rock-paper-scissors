@@ -61,6 +61,8 @@
 		<Unit filename="html/client.html" />
 		<Unit filename="imconfig.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="render/texture_manager.cpp" />
+		<Unit filename="render/texture_manager.h" />
 		<Unit filename="render/window.cpp" />
 		<Unit filename="render/window.h" />
 		<Unit filename="run.sh" />

@@ -4,6 +4,7 @@
 // forward declarations
 namespace render {
 class window;
+class texture_manager;
 }
 namespace game_logic {
 class game_logic_base;
@@ -12,6 +13,7 @@ class game_logic_base;
 struct game_state {
   /// Wrap the current game state and key state objects, to pass between emscripten loop functions
   render::window &window;
+  render::texture_manager &textures;
   game_logic::game_logic_base &logic;
   unsigned int rounds_to_play = 5;
   unsigned int rounds_played = 0;
