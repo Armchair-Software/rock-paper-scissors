@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <magic_enum.hpp>
 #include "strategy/random.h"
-#include "strategy/wang_et_al_2014.h"
+#include "strategy/wang_et_al_2014_mod1.h"
 
 namespace game_logic {
 
@@ -23,7 +23,7 @@ void offline::set_difficulty(difficulty_type new_difficulty) {
     strategy = std::make_unique<strategy::random>();
     break;
   case difficulty_type::hard:
-    strategy = std::make_unique<strategy::wang_et_al_2014>();
+    strategy = std::make_unique<strategy::wang_et_al_2014_mod1>();
     break;
   }                                                                             // no default case, to enforce exhaustive switch
 }

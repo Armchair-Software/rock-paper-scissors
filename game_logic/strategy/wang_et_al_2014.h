@@ -18,7 +18,7 @@ protected:
   std::vector<past_round> past_rounds;                                          // list of previous rounds, most recent last
 
 public:
-  virtual move_type get_next_move() override final;
+  virtual move_type get_next_move() override;
   virtual void declare_last_player_move(move_type player_move) override final;
 };
 

@@ -129,6 +129,7 @@ add_executable(client
   game_logic/offline.cpp
   game_logic/strategy/random.cpp
   game_logic/strategy/wang_et_al_2014.cpp
+  game_logic/strategy/wang_et_al_2014_mod1.cpp
   gui/gui.cpp
   main.cpp
   render/window.cpp
