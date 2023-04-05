@@ -124,6 +124,7 @@ add_compile_definitions(
 
 add_executable(client
   # project-specific:
+  game_logic/move.cpp
   gui/gui.cpp
   main.cpp
   render/window.cpp

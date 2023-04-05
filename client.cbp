@@ -30,6 +30,8 @@
 		</Unit>
 		<Unit filename="build.sh" />
 		<Unit filename="compile_resource_to_raw_string.sh" />
+		<Unit filename="game_logic/move.cpp" />
+		<Unit filename="game_logic/move.h" />
 		<Unit filename="generate_git_version.sh" />
 		<Unit filename="get_version.cpp" />
 		<Unit filename="get_version.h" />
