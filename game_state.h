@@ -1,6 +1,14 @@
 #ifndef GAME_STATE_H_INCLUDED
 #define GAME_STATE_H_INCLUDED
 
+// forward declarations
+namespace render {
+class window;
+}
+namespace game_logic {
+class game_logic_base;
+}
+
 struct game_state {
   /// Wrap the current game state and key state objects, to pass between emscripten loop functions
   render::window &window;
