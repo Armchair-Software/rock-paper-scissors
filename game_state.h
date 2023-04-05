@@ -17,6 +17,15 @@ struct game_state {
   unsigned int rounds_played = 0;
   unsigned int wins = 0;
   unsigned int draws = 0;
+
+  enum class next_loop_type {
+    continue_this,
+    select_difficulty,
+    player_move,
+    opponent_move,
+  } next_loop = next_loop_type::continue_this;                                  // where to direct logic flow after the current loop is finished
+
+  void dispatch_next_loop();
 };
 
 #endif // GAME_STATE_H_INCLUDED

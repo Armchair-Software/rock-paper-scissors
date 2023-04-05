@@ -131,6 +131,8 @@ add_executable(client
   game_logic/strategy/wang_et_al_2014.cpp
   game_logic/strategy/wang_et_al_2014_inverse.cpp
   game_logic/strategy/wang_et_al_2014_mod1.cpp
+  game_loops.cpp
+  game_state.cpp
   gui/draw_stats_window.cpp
   gui/gui.cpp
   main.cpp

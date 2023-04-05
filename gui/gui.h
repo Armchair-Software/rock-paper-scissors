@@ -14,6 +14,9 @@ void init(render::window &window);
 void shutdown();
 void restart(render::window &window);
 
+void frame_begin();
+void frame_end(render::window &window);
+
 }
 
 #endif // GUI_H_INCLUDED

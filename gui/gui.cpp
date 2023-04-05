@@ -141,4 +141,19 @@ void restart(render::window &window) {
   init(window);
 }
 
+void frame_begin() {
+  /// Helper to tidy up repetitive gui setup at the start of a frame
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplGlfw_NewFrame();
+  ImGui::NewFrame();
+}
+
+void frame_end(render::window &window) {
+  /// Helper to tidy up repetitive gui setup at the end of a frame
+  ImGui::Render();
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+  glfwSwapBuffers(window.glfw_window);
+}
+
+
 }
