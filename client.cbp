@@ -36,6 +36,7 @@
 		<Unit filename="git_version.h" />
 		<Unit filename="gui/world_gui.h" />
 		<Unit filename="html/client.html" />
+		<Unit filename="imconfig.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="render/window.cpp" />
 		<Unit filename="render/window.h" />

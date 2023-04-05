@@ -129,6 +129,15 @@ add_executable(client
   # shared libraries:
   get_version.cpp
   shader_load.cpp
+  # 3rd party libraries:
+  include/imgui/imgui.cpp
+  include/imgui/imgui_demo.cpp
+  include/imgui/imgui_draw.cpp
+  include/imgui/imgui_tables.cpp
+  include/imgui/imgui_widgets.cpp
+  include/imgui/imgui_impl_glfw.cpp
+  include/imgui/imgui_stdlib.cpp
+  include/imgui/imgui_impl_opengl3.cpp
 )
 
 target_link_libraries(client
