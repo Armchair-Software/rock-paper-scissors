@@ -104,7 +104,6 @@ static void loop_player_move(void *data) {
   enum class next_loop_type {
     continue_this,
     opponent_move,
-    select_difficulty
   } next_loop = next_loop_type::continue_this;                                  // where to direct logic flow after this loop is finished
 
   ImGui_ImplOpenGL3_NewFrame();
@@ -155,10 +154,6 @@ static void loop_player_move(void *data) {
       emscripten_cancel_main_loop();
       emscripten_set_main_loop_arg(&loop_opponent_move, &state, 0, true);
     }
-    break;
-  case next_loop_type::select_difficulty:
-    emscripten_cancel_main_loop();
-    emscripten_set_main_loop_arg(&loop_select_difficulty, &state, 0, true);
     break;
   case next_loop_type::continue_this:
     // continue this loop
