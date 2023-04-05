@@ -4,6 +4,7 @@
 #include "game_state.h"
 #include "gui/gui.h"
 #include "gui/draw_stats_window.h"
+#include "gui/draw_image_button.h"
 #include "game_logic/game_logic_base.h"
 
 void loop_select_difficulty(void *data) {
@@ -50,7 +51,7 @@ void loop_player_move(void *data) {
     magic_enum::enum_for_each<game_logic::move_type>([&](game_logic::move_type move) {
       std::string move_name{magic_enum::enum_name(move)};                       // derive move name from enum name
       move_name[0] = static_cast<char>(std::toupper(move_name[0]));             // capitalise first letter of the name
-      if(ImGui::Button(move_name.c_str(), vec2f{100, 40})) {                    // select move button
+      if(gui::draw_image_button(move_name, state, game_logic::get_icon_texture_id(move))) { // image button for each move option
         state.logic.process();                                                  // calculate the next move
         state.logic.player_move(move);                                          // declare the player move
         state.next_loop = game_state::next_loop_type::opponent_move;            // opponent's turn

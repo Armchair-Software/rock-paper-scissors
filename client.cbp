@@ -54,6 +54,8 @@
 		<Unit filename="get_version.cpp" />
 		<Unit filename="get_version.h" />
 		<Unit filename="git_version.h" />
+		<Unit filename="gui/draw_image_button.cpp" />
+		<Unit filename="gui/draw_image_button.h" />
 		<Unit filename="gui/draw_stats_window.cpp" />
 		<Unit filename="gui/draw_stats_window.h" />
 		<Unit filename="gui/gui.cpp" />
