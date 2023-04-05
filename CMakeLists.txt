@@ -102,6 +102,7 @@ add_executable(client
   gui/draw_stats_window.cpp
   gui/gui.cpp
   main.cpp
+  render/scene.cpp
   render/texture_manager.cpp
   render/window.cpp
   # shared libraries:

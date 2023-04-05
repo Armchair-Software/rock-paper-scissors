@@ -24,6 +24,7 @@ enum class verdict_type : unsigned int {
 
 std::string describe_move(move_type move);
 render::texture_manager::texture_id get_icon_texture_id(move_type move);
+render::texture_manager::texture_id get_hand_texture_id(move_type move);
 
 constexpr verdict_type verdict(move_type player_move, move_type opponent_move) {
   /// Return the verdict of a player and opponent move combination

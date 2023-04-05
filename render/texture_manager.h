@@ -22,6 +22,7 @@ public:
     icon_scissors,
   };
   std::unordered_map<texture_id, aabb2f> subtextures;                           // map of texture ID to sub-texture region in texels (axis-aligned bounding box)
+  static constexpr vec2ui subtexture_size{128, 128};                            // size of sub-textures in the texture atlas, in px
 
   texture_manager();
   ~texture_manager();

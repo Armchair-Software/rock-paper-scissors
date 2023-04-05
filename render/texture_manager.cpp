@@ -17,7 +17,6 @@ texture_manager::texture_manager() {
   }
 
   png::image<png::rgba_pixel> png_data{"textureatlas.png"};                     // load texture atlas from the embedded emscripten filesystem
-  //png::image<png::rgba_pixel> png_data{"temp.png"};                     // load texture atlas from the embedded emscripten filesystem
   texture_size.assign(png_data.get_width(), png_data.get_height());             // cache the texture size
   std::cout << "Texture atlas: PNG decoded, size " << texture_size << std::endl;
 

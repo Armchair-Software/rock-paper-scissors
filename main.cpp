@@ -2,6 +2,7 @@
 #include <iostream>
 #include "render/window.h"
 #include "render/texture_manager.h"
+#include "render/scene.h"
 #include "gui/gui.h"
 #include "game_state.h"
 #include "game_logic/offline.h"
@@ -30,12 +31,15 @@ void boost::throw_exception(std::exception const & e) {
   window.set_window_title("RPS version " + get_version() + " by Eugene Hopkinson");
 
   render::texture_manager textures;                                             // load the textures
-  gui::init(window);                                                            // set up the GUI
+  render::scene scene;                                                          // scene renderer
   game_logic::offline logic;                                                    // game logic: offline local AI
+
+  gui::init(window);                                                            // set up the GUI
 
   game_state state{                                                             // package references to game state for the loops
     window,
     textures,
+    scene,
     logic
   };
   state.next_loop = game_state::next_loop_type::select_difficulty;
