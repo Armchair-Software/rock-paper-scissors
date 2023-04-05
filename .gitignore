@@ -1,5 +1,6 @@
 # build artifacts
 build
+build_rel
 
 # Git auto-versioning
 git_version.h
