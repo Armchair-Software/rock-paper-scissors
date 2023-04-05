@@ -6,7 +6,7 @@
 namespace game_logic::strategy {
 
 static move_type beats_move(move_type move) {
-  /// Return the move that would beats the given move
+  /// Return the move that would beat the given move
   auto const beats_move_type_index{(std::to_underlying(move) + 1) % magic_enum::enum_count<move_type>()};
   return magic_enum::enum_cast<move_type>(beats_move_type_index).value();       // cyclical - the next item always beats the previous
 }
@@ -44,6 +44,12 @@ void wang_et_al_2014::declare_last_player_move(move_type move) {
   /// Get told about the player's last move, and update our verdict history
   past_rounds.back().player_move = move;
   past_rounds.back().verdict = verdict(past_rounds.back().player_move, past_rounds.back().our_move);
+}
+
+void wang_et_al_2014::reset() {
+  /// Clear all state ready for the next game
+  past_rounds.clear();
+  past_rounds.shrink_to_fit();
 }
 
 }

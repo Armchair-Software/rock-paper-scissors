@@ -15,4 +15,9 @@ void random::declare_last_player_move(move_type) {
   // noop
 }
 
+void random::reset() {
+  /// Reinitialise our random generator from our random device
+  random_engine = std::default_random_engine{random_device()};
+}
+
 }

@@ -78,4 +78,10 @@ verdict_type offline::get_last_verdict() const {
   return last_verdict;
 }
 
+void offline::reset() {
+  /// Reset our strategy's state, ready for the next game
+  if(strategy) strategy->reset();
+  // we don't bother resetting our own state, as it's overwritten each move anyway
+}
+
 }

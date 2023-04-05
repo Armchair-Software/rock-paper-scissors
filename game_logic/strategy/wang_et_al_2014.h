@@ -20,6 +20,8 @@ protected:
 public:
   virtual move_type get_next_move() override;
   virtual void declare_last_player_move(move_type player_move) override final;
+
+  virtual void reset() override final;
 };
 
 }

@@ -24,6 +24,8 @@ public:
   virtual move_type get_last_player_move() const override final;
   virtual move_type get_last_opponent_move() const override final;
   virtual verdict_type get_last_verdict() const override final;
+
+  virtual void reset() override final;
 };
 
 }

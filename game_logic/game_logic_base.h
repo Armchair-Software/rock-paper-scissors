@@ -25,6 +25,8 @@ public:
   virtual move_type get_last_player_move() const = 0;
   virtual move_type get_last_opponent_move() const = 0;
   virtual verdict_type get_last_verdict() const = 0;
+
+  virtual void reset() = 0;
 };
 
 }

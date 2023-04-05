@@ -220,6 +220,7 @@ static void loop_opponent_move(void *data) {
     state.rounds_played = 0;
     state.wins = 0;
     state.draws = 0;
+    state.logic.reset();
     emscripten_cancel_main_loop();
     emscripten_set_main_loop_arg(&loop_select_difficulty, &state, 0, true);
     break;
