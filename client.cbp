@@ -37,6 +37,8 @@
 		<Unit filename="gui/world_gui.h" />
 		<Unit filename="html/client.html" />
 		<Unit filename="main.cpp" />
+		<Unit filename="render/window.cpp" />
+		<Unit filename="render/window.h" />
 		<Unit filename="run.sh" />
 		<Unit filename="shader_load.cpp" />
 		<Unit filename="shader_load.h" />

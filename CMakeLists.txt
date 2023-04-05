@@ -125,6 +125,7 @@ add_compile_definitions(
 add_executable(client
   # project-specific:
   main.cpp
+  render/window.cpp
   # shared libraries:
   get_version.cpp
   shader_load.cpp
