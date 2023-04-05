@@ -44,6 +44,7 @@
 		<Unit filename="game_logic/strategy/wang_et_al_2014.h" />
 		<Unit filename="game_logic/strategy/wang_et_al_2014_mod1.cpp" />
 		<Unit filename="game_logic/strategy/wang_et_al_2014_mod1.h" />
+		<Unit filename="game_state.h" />
 		<Unit filename="generate_git_version.sh" />
 		<Unit filename="get_version.cpp" />
 		<Unit filename="get_version.h" />

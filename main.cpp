@@ -8,6 +8,7 @@
 #include "render/window.h"
 #include "game_logic/offline.h"
 #include "gui/gui.h"
+#include "game_state.h"
 #include "get_version.h"
 
 #ifdef BOOST_NO_EXCEPTIONS
@@ -23,14 +24,6 @@ static void loop_select_difficulty(void *data);
 static void loop_player_move(void *data);
 static void loop_opponent_move(void *data);
 
-struct game_state {
-  render::window &window;
-  game_logic::game_logic_base &logic;
-  unsigned int rounds_to_play = 5;
-  unsigned int rounds_played = 0;
-  unsigned int wins = 0;
-  unsigned int draws = 0;
-};
 
 [[noreturn]] auto main()->int {                                                 // noreturn here is not standards-compliant, but is appropriate for emscripten with a main loop
   render::window window;
@@ -182,7 +175,7 @@ void loop_opponent_move(void *data) {
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
 
-  ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f)); // set next window position in the centre of the frame, use pivot=(0.5f,0.5f) to center on given point, etc.
+  ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f)); // set next window position in the centre of the frame
   if(ImGui::Begin("Showdown", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse)) {
     auto opponent_move{state.logic.get_last_opponent_move()};
     ImGui::TextUnformatted(("Your opponent's move: " + std::string{magic_enum::enum_name(opponent_move)} + "!").c_str());
