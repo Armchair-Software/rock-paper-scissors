@@ -11,8 +11,8 @@ bool draw_image_button(std::string const &button_name, game_state &state, render
                             vec2f{128.0f, 128.0f},                              // button size
                             state.textures.subtextures[texture_id].min,         // uv0
                             state.textures.subtextures[texture_id].max,         // uv1
-                            ImVec4(0, 0, 0, 0),                                 // tint colour
-                            ImVec4(1, 1, 1, 1));                                // border colour
+                            ImVec4(0, 0, 0, 0),                                 // background colour
+                            ImVec4(1, 1, 1, 1));                                // tint colour
 }
 
 }
