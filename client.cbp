@@ -42,6 +42,8 @@
 		<Unit filename="game_logic/strategy/strategy_base.h" />
 		<Unit filename="game_logic/strategy/wang_et_al_2014.cpp" />
 		<Unit filename="game_logic/strategy/wang_et_al_2014.h" />
+		<Unit filename="game_logic/strategy/wang_et_al_2014_inverse.cpp" />
+		<Unit filename="game_logic/strategy/wang_et_al_2014_inverse.h" />
 		<Unit filename="game_logic/strategy/wang_et_al_2014_mod1.cpp" />
 		<Unit filename="game_logic/strategy/wang_et_al_2014_mod1.h" />
 		<Unit filename="game_state.h" />

@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <magic_enum.hpp>
 #include "strategy/random.h"
+#include "strategy/wang_et_al_2014_inverse.h"
 #include "strategy/wang_et_al_2014_mod1.h"
 
 namespace game_logic {
@@ -16,8 +17,7 @@ void offline::set_difficulty(difficulty_type new_difficulty) {
   switch(difficulty) {
   #pragma GCC diagnostic pop
   case difficulty_type::easy:
-    strategy = std::make_unique<strategy::random>();
-    // TODO: implement easy strategy
+    strategy = std::make_unique<strategy::wang_et_al_2014_inverse>();
     break;
   case difficulty_type::medium:
     strategy = std::make_unique<strategy::random>();
