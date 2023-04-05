@@ -34,6 +34,8 @@
 		<Unit filename="get_version.cpp" />
 		<Unit filename="get_version.h" />
 		<Unit filename="git_version.h" />
+		<Unit filename="gui/gui.cpp" />
+		<Unit filename="gui/gui.h" />
 		<Unit filename="gui/world_gui.h" />
 		<Unit filename="html/client.html" />
 		<Unit filename="imconfig.h" />

@@ -2,8 +2,8 @@
 #include <iostream>
 #include <emscripten.h>
 #include "render/window.h"
+#include "gui/gui.h"
 #include "get_version.h"
-
 
 #ifdef BOOST_NO_EXCEPTIONS
 void boost::throw_exception(std::exception const & e) {
@@ -29,6 +29,8 @@ static void loop_main(void *data);
     return EXIT_FAILURE;
   }
   window.set_window_title("RPS version " + get_version() + " by Eugene Hopkinson");
+
+  gui::init(window);                                                            // set up the GUI
 
   emscripten_set_main_loop_arg(&loop_select_difficulty, nullptr, 0, true);      // loop function, user data, FPS (0 to use browser requestAnimationFrame mechanism), simulate infinite loop
 
