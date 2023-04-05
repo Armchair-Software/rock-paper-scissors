@@ -15,6 +15,5 @@ fi
 port=6939
 
 echo "Launching $launch_html with emrun..."
-#emrun --port "$port" "$launch_html" --browser /home/slowriot/usr/firefox-nightly/firefox-bin --browser_args="--new-window"
-emrun --port "$port" "$launch_html" --browser /usr/lib/chromium/chromium --browser_args='--new-window'
+emrun --port "$port" "$launch_html"
 echo "Finished."
