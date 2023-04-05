@@ -20,9 +20,9 @@ void init(render::window &window) {
 
   ImGui::StyleColorsDark();                                                     // imgui style
   ImGuiStyle& style = ImGui::GetStyle();
-  style.WindowRounding = 3;
-  style.FrameRounding = 2;
-  style.GrabRounding = 1;
+  style.WindowRounding = 4;
+  style.FrameRounding = 3;
+  style.GrabRounding = 2;
 
   std::vector<vec3ui> palette{{                                                 // orange
     vec3ui{  0,   0, 0},
