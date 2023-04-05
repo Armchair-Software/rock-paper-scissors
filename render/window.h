@@ -4,7 +4,7 @@
 #include <string>
 #include <emscripten/html5.h>
 #include <GLFW/glfw3.h>
-#include "vectorstorm/vector/vector2.h"
+#include <vectorstorm/vector/vector2.h>
 
 namespace render {
 
