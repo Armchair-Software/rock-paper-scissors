@@ -63,6 +63,11 @@ void offline::player_move(move_type move) {
   std::cout << "Offline logic: Verdict: " << std::quoted(magic_enum::enum_name(last_verdict)) << std::endl;
 }
 
+move_type offline::get_last_player_move() const {
+  /// Report the player's last move
+  return player_last_move;
+}
+
 move_type offline::get_last_opponent_move() const {
   /// Report the opponent's last move
   return opponent_last_move;

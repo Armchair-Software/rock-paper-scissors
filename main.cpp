@@ -177,7 +177,9 @@ void loop_opponent_move(void *data) {
 
   ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f)); // set next window position in the centre of the frame
   if(ImGui::Begin("Showdown", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse)) {
+    auto player_move{state.logic.get_last_player_move()};
     auto opponent_move{state.logic.get_last_opponent_move()};
+    ImGui::TextUnformatted(("Your played: " + std::string{magic_enum::enum_name(player_move)} + "...").c_str());
     ImGui::TextUnformatted(("Your opponent's move: " + std::string{magic_enum::enum_name(opponent_move)} + "!").c_str());
     auto verdict{state.logic.get_last_verdict()};
     ImGui::TextUnformatted(("Result: " + std::string{magic_enum::enum_name(verdict)}).c_str());

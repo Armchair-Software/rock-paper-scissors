@@ -21,6 +21,7 @@ public:
 
   virtual void process() override final;
   virtual void player_move(move_type move) override final;
+  virtual move_type get_last_player_move() const override final;
   virtual move_type get_last_opponent_move() const override final;
   virtual verdict_type get_last_verdict() const override final;
 };
