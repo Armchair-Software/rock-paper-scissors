@@ -31,6 +31,8 @@
 		<Unit filename="build.sh" />
 		<Unit filename="compile_resource_to_raw_string.sh" />
 		<Unit filename="game_logic/difficulty.h" />
+		<Unit filename="game_logic/game_logic_base.cpp" />
+		<Unit filename="game_logic/game_logic_base.h" />
 		<Unit filename="game_logic/move.cpp" />
 		<Unit filename="game_logic/move.h" />
 		<Unit filename="game_logic/strategy/random.cpp" />
