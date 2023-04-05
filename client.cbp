@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="client" />
+		<Option makefile="(build script)" />
+		<Option makefile_is_custom="1" />
+		<Option compiler="gcc" />
+		<Option virtualFolders="CMake Files/;" />
+		<Build>
+			<Target title="client">
+				<Option output="run.sh" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="./" />
+				<Option object_output="obj/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
+				<MakeCommands>
+					<Build command="./build.sh client" />
+					<CompileFile command='./build.sh &quot;$file&quot;' />
+					<Clean command="./build.sh clean" />
+					<DistClean command="./build.sh clean" />
+					<AskRebuildNeeded command="$make -q -f build/Makefile $target" />
+					<SilentBuild command="./build.sh client &gt; $(CMD_NULL)" />
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="CMakeLists.txt">
+			<Option virtualFolder="CMake Files/" />
+		</Unit>
+		<Unit filename="build.sh" />
+		<Unit filename="compile_resource_to_raw_string.sh" />
+		<Unit filename="generate_git_version.sh" />
+		<Unit filename="get_version.cpp" />
+		<Unit filename="get_version.h" />
+		<Unit filename="git_version.h" />
+		<Unit filename="gui/world_gui.h" />
+		<Unit filename="html/client.html" />
+		<Unit filename="main.cpp" />
+		<Unit filename="run.sh" />
+		<Unit filename="shader_load.cpp" />
+		<Unit filename="shader_load.h" />
+		<Unit filename="version.h" />
+		<Extensions>
+			<AutoVersioning>
+				<Scheme minor_max="10" build_max="0" rev_max="0" rev_rand_max="10" build_times_to_increment_minor="100" />
+				<Settings autoincrement="1" date_declarations="1" use_define="0" update_manifest="1" do_auto_increment="1" ask_to_increment="0" language="C++" svn="0" svn_directory="" header_path="version.h" />
+				<Changes_Log show_changes_editor="0" app_title="released version %M.%m.%b of %p" changeslog_path="ChangesLog.txt" />
+				<Code header_guard="VERSION_H" namespace="AutoVersion" prefix="" />
+			</AutoVersioning>
+			<editor_config active="1" use_tabs="0" tab_indents="1" tab_width="2" indent="2" eol_mode="2" />
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
