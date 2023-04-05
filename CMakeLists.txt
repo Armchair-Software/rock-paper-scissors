@@ -59,57 +59,22 @@ else()
   message(FATAL_ERROR "Invalid build type \"${CMAKE_BUILD_TYPE}\"")
 endif()
 
-set(EXCEPTION_HANDLING none CACHE STRING "Exception handling mode: none, js or wasm")
-# enable wasm when support improves (https://emscripten.org/docs/porting/exceptions.html)
-if(EXCEPTION_HANDLING STREQUAL "none")
-  message(STATUS "Exception handling disabled")
-  set(exception_compile_definitions
-    DISABLE_EXCEPTION_THROWING
-    DISABLE_EXCEPTION_CATCHING
-    BOOST_NO_EXCEPTIONS
-    BOOST_EXCEPTION_DISABLE
-    JSON_NOEXCEPTION
-  )
-  set(exception_compile_options
-    -fignore-exceptions
-    -fno-exceptions
-  )
-  set(exception_link_options
-    -fno-except
-    -fignore-exceptions
-    #-fno-exceptions
-  )
-elseif(EXCEPTION_HANDLING STREQUAL "js")
-  message(STATUS "Exception handling using JS (slow)")
-  set(exception_compile_definitions
-    NO_DISABLE_EXCEPTION_CATCHING
-  )
-  set(exception_compile_options
-    # inefficient javascript exceptions:
-    -sNO_DISABLE_EXCEPTION_CATCHING
-  )
-  set(exception_link_options
-    # inefficient javascript exceptions:
-    -sNO_DISABLE_EXCEPTION_CATCHING
-  )
-elseif(EXCEPTION_HANDLING STREQUAL "wasm")
-  message(STATUS "Exception handling using WASM)")
-  set(exception_compile_definitions
-    NO_DISABLE_EXCEPTION_CATCHING
-  )
-  set(exception_compile_options
-    # enable native wasm exceptions
-    -fwasm-exceptions
-    -sSUPPORT_LONGJMP=wasm
-  )
-  set(exception_link_options
-    # enable native wasm exceptions
-    -fwasm-exceptions
-    -sSUPPORT_LONGJMP=wasm
-  )
-else()
-  message(FATAL_ERROR "Invalid exception handling mode \"${EXCEPTION_HANDLING}\"")
-endif()
+# exception handling disabled for emscripten
+set(exception_compile_definitions
+  DISABLE_EXCEPTION_THROWING
+  DISABLE_EXCEPTION_CATCHING
+  BOOST_NO_EXCEPTIONS
+  BOOST_EXCEPTION_DISABLE
+  JSON_NOEXCEPTION
+)
+set(exception_compile_options
+  -fignore-exceptions
+  -fno-exceptions
+)
+set(exception_link_options
+  -fno-except
+  -fignore-exceptions
+)
 
 add_compile_definitions(
   BOOST_DISABLE_THREADS
