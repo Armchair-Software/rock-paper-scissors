@@ -9,6 +9,7 @@ void scene::update() {
   /// Tick over the animation for the background scene
   hand_travel_opponent = lerp(hand_travel_opponent, hand_target_opponent, 0.2f); // smoothly slide the hands in and out of the frame
   hand_travel_player = lerp(hand_travel_player, hand_target_player, 0.15f);
+  colour_background = colour_background.lerp(0.1f, colour_background_target);   // smoothly fade the background colour to target
 }
 
 void scene::draw(game_state &state) const {
@@ -19,11 +20,9 @@ void scene::draw(game_state &state) const {
   ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0,0));
   ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
   ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-  if(!ImGui::Begin("scene_window", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoBringToFrontOnFocus)) {
-    ImGui::PopStyleVar(3);
-    ImGui::End();
-    return;
-  }
+  ImGui::PushStyleColor(ImGuiCol_WindowBg, colour_background);                  // set window background colour
+  ImGui::Begin("scene_window", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoBringToFrontOnFocus);
+  ImGui::PopStyleColor();
   ImGui::PopStyleVar(3);
 
   auto const &opponent_texture_id{get_hand_texture_id(opponent_move)};

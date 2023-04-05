@@ -10,6 +10,7 @@ void game_state::dispatch_next_loop() {
   case next_loop_type::select_difficulty:
     scene.hand_target_opponent = 0.0f;
     scene.hand_target_player = 0.0f;
+    scene.colour_background_target = vec4f{0.3f, 0.3f, 0.3f, 1.0f};
     rounds_played = 0;
     wins = 0;
     draws = 0;
@@ -21,6 +22,7 @@ void game_state::dispatch_next_loop() {
   case next_loop_type::player_move:
     scene.hand_target_opponent = 0.0f;
     scene.hand_target_player = 0.0f;
+    scene.colour_background_target = vec4f{0.1f, 0.1f, 0.1f, 1.0f};
     next_loop = next_loop_type::continue_this;
     emscripten_cancel_main_loop();
     emscripten_set_main_loop_arg(&loop_player_move, this, 0, true);
@@ -36,12 +38,17 @@ void game_state::dispatch_next_loop() {
       switch(verdict) {
       case game_logic::verdict_type::win:
         ++wins;
+        scene.colour_background = vec4f{1.0f, 1.0f, 1.0f, 1.0f};                // bright flash
+        scene.colour_background_target = vec4f{0.94f, 0.47f, 0.0f, 1.0f};       // sunny orange for a win
         break;
       case game_logic::verdict_type::draw:
         ++draws;
+        scene.colour_background_target = vec4f{0.46f, 0.24f, 0.0f, 1.0f};       // something intermediate for a draw
         break;
       case game_logic::verdict_type::lose:
         // losses are calculated automatically from total, wins and draws
+        scene.colour_background = vec4f{1.0f, 0.0f, 0.0f, 1.0f};                // dark red "wounded" flash
+        scene.colour_background_target = vec4f{0.125f, 0.06f, 0.0f, 1.0f};      // murky brown for a loss
         break;
       }
       next_loop = next_loop_type::continue_this;
