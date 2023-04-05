@@ -20,10 +20,11 @@ void boost::throw_exception(std::exception const & e) {
 #endif // BOOST_NO_EXCEPTIONS
 
 
-static void loop_select_difficulty(void *data);
+static void loop_select_difficulty(void *data);                                 // loop functions act as callbacks, emscripten expects them to accept a void pointer to our user data
 static void loop_player_move(void *data);
 static void loop_opponent_move(void *data);
 
+static void draw_stats_window(game_state const &state);
 
 [[noreturn]] auto main()->int {                                                 // noreturn here is not standards-compliant, but is appropriate for emscripten with a main loop
   render::window window;
@@ -53,7 +54,7 @@ static void loop_opponent_move(void *data);
 }
 
 
-void loop_select_difficulty(void *data) {
+static void loop_select_difficulty(void *data) {
   /// UI loop to prompt user to select game difficulty
   auto &state{*static_cast<game_state*>(data)};
 
@@ -68,7 +69,7 @@ void loop_select_difficulty(void *data) {
   if(ImGui::Begin("Start game", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse)) {
     ImGui::TextUnformatted("Rounds to play");
     ImGui::SetNextItemWidth(-FLT_MIN);                                          // stretch next input to full width
-    if(ImGui::InputInt("##rounds", reinterpret_cast<int*>(&state.rounds_to_play), 1, 5)) { // input for how many rounds to play
+    if(ImGui::InputInt("##rounds", reinterpret_cast<int*>(&state.rounds_to_play), 1, 5)) { // input for how many rounds to play - imgui expects a signed int - with the limited range, treating our unsigned int as signed is safe
       state.rounds_to_play = std::clamp(state.rounds_to_play, 1u, 100u);        // keep the numbers within a reasonable range
     }
 
@@ -97,7 +98,7 @@ void loop_select_difficulty(void *data) {
   }
 }
 
-void loop_player_move(void *data) {
+static void loop_player_move(void *data) {
   auto &state{*static_cast<game_state*>(data)};
 
   enum class next_loop_type {
@@ -110,7 +111,7 @@ void loop_player_move(void *data) {
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
 
-  ImGui::SetNextWindowSize(vec2f{0, -FLT_MIN}, ImGuiCond_FirstUseEver);
+  ImGui::SetNextWindowSize(vec2f{0, -FLT_MIN}, ImGuiCond_Always);
   ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, vec2f{0.5f, 0.5f}); // set next window position in the centre of the frame, use pivot=(0.5f,0.5f) to center on given point, etc.
   if(ImGui::Begin("Choose your move", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse)) {
     magic_enum::enum_for_each<game_logic::move_type>([&](game_logic::move_type move) {
@@ -128,6 +129,8 @@ void loop_player_move(void *data) {
     });
   }
   ImGui::End();
+
+  draw_stats_window(state);                                                     // draw the game statistics window
 
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -162,7 +165,7 @@ void loop_player_move(void *data) {
   }
 }
 
-void loop_opponent_move(void *data) {
+static void loop_opponent_move(void *data) {
   auto &state{*static_cast<game_state*>(data)};
 
   enum class next_loop_type {
@@ -175,32 +178,34 @@ void loop_opponent_move(void *data) {
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
 
+  ImGui::SetNextWindowSize(vec2f{0, -FLT_MIN}, ImGuiCond_Always);
   ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f)); // set next window position in the centre of the frame
   if(ImGui::Begin("Showdown", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse)) {
     auto player_move{state.logic.get_last_player_move()};
     auto opponent_move{state.logic.get_last_opponent_move()};
     ImGui::TextUnformatted(("Your played: " + std::string{magic_enum::enum_name(player_move)} + "...").c_str());
     ImGui::TextUnformatted(("Your opponent's move: " + std::string{magic_enum::enum_name(opponent_move)} + "!").c_str());
+
+    ImGui::Spacing();
     auto verdict{state.logic.get_last_verdict()};
     ImGui::TextUnformatted(("Result: " + std::string{magic_enum::enum_name(verdict)}).c_str());
-    std::stringstream totalss;
-    auto const losses{state.rounds_played - state.wins - state.draws};
-    totalss << "Total: " << state.rounds_played << " rounds with "
-            << state.wins  << " wins ("   << (state.wins  * 100) / state.rounds_played << "%), "
-            << state.draws << " draws ("  << (state.draws * 100) / state.rounds_played << "%), "
-            << losses      << " losses (" << (losses      * 100) / state.rounds_played << "%)";
-    ImGui::TextUnformatted(totalss.str().c_str());
+
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
 
     if(state.rounds_played < state.rounds_to_play) {                            // only show the next round button if we have more rounds to play
-      if(ImGui::Button("Next round")) {
+      if(ImGui::Button("Next round", vec2f{200, 40})) {
         next_loop = next_loop_type::player_move;                                // proceed to the player's turn
       }
     }
-    if(ImGui::Button("End game")) {
+    if(ImGui::Button("End game", vec2f{200, 20})) {
       next_loop = next_loop_type::select_difficulty;                            // proceed to the difficulty select loop
     }
   }
   ImGui::End();
+
+  draw_stats_window(state);                                                     // draw the game statistics window
 
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -221,4 +226,21 @@ void loop_opponent_move(void *data) {
   case next_loop_type::continue_this:
     // continue this loop
   }
+}
+
+static void draw_stats_window(game_state const &state) {
+  /// Draw a window containing the game statistics
+  ImGui::SetNextWindowSize(vec2f{0, -FLT_MIN}, ImGuiCond_Always);
+  if(ImGui::Begin("Stats", nullptr)) {
+    ImGui::PushItemWidth(50);
+    ImGui::InputInt("Rounds played", const_cast<int*>(reinterpret_cast<int const*>(&state.rounds_played)), 0, 0, ImGuiInputTextFlags_ReadOnly); // imgui expects a signed int - the input is read-only and in our expected range this is safe
+    if(state.rounds_played != 0) {
+      ImGui::InputInt(("Wins (" + std::to_string((state.wins * 100) / state.rounds_played) + "%)").c_str(), const_cast<int*>(reinterpret_cast<int const*>(&state.rounds_played)), 0, 0, ImGuiInputTextFlags_ReadOnly);
+      ImGui::InputInt(("Draws (" + std::to_string((state.draws * 100) / state.rounds_played) + "%)").c_str(), const_cast<int*>(reinterpret_cast<int const*>(&state.draws)), 0, 0, ImGuiInputTextFlags_ReadOnly);
+      auto const losses{state.rounds_played - state.wins - state.draws};
+      ImGui::InputInt(("Losses (" + std::to_string((losses * 100) / state.rounds_played) + "%)").c_str(), const_cast<int*>(reinterpret_cast<int const*>(&losses)), 0, 0, ImGuiInputTextFlags_ReadOnly);
+    }
+    ImGui::PopItemWidth();
+  }
+  ImGui::End();
 }
