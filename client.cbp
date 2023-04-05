@@ -33,6 +33,8 @@
 		<Unit filename="game_logic/difficulty.h" />
 		<Unit filename="game_logic/move.cpp" />
 		<Unit filename="game_logic/move.h" />
+		<Unit filename="game_logic/strategy/random.cpp" />
+		<Unit filename="game_logic/strategy/random.h" />
 		<Unit filename="game_logic/strategy/strategy_base.h" />
 		<Unit filename="generate_git_version.sh" />
 		<Unit filename="get_version.cpp" />
