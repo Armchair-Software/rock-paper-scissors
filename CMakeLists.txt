@@ -126,6 +126,7 @@ add_executable(client
   # project-specific:
   game_logic/game_logic_base.cpp
   game_logic/move.cpp
+  game_logic/offline.cpp
   game_logic/strategy/random.cpp
   gui/gui.cpp
   main.cpp

@@ -35,6 +35,8 @@
 		<Unit filename="game_logic/game_logic_base.h" />
 		<Unit filename="game_logic/move.cpp" />
 		<Unit filename="game_logic/move.h" />
+		<Unit filename="game_logic/offline.cpp" />
+		<Unit filename="game_logic/offline.h" />
 		<Unit filename="game_logic/strategy/random.cpp" />
 		<Unit filename="game_logic/strategy/random.h" />
 		<Unit filename="game_logic/strategy/strategy_base.h" />
