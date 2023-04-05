@@ -1,7 +1,12 @@
 #include <boost/throw_exception.hpp>
 #include <iostream>
 #include <emscripten.h>
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
+#include <magic_enum.hpp>
 #include "render/window.h"
+#include "game_logic/offline.h"
 #include "gui/gui.h"
 #include "get_version.h"
 
@@ -13,8 +18,15 @@ void boost::throw_exception(std::exception const & e) {
 }
 #endif // BOOST_NO_EXCEPTIONS
 
+
 static void loop_select_difficulty(void *data);
-static void loop_main(void *data);
+static void loop_player_move(void *data);
+static void loop_opponent_move(void *data);
+
+struct game_state {
+  render::window &window;
+  game_logic::game_logic_base &logic;
+};
 
 [[noreturn]] auto main()->int {                                                 // noreturn here is not standards-compliant, but is appropriate for emscripten with a main loop
   render::window window;
@@ -26,22 +38,156 @@ static void loop_main(void *data);
         window.location.replace("https://get.webgl.org/webgl2/");
       }
     );
-    return EXIT_FAILURE;
+    std::abort();
   }
   window.set_window_title("RPS version " + get_version() + " by Eugene Hopkinson");
 
   gui::init(window);                                                            // set up the GUI
 
-  emscripten_set_main_loop_arg(&loop_select_difficulty, nullptr, 0, true);      // loop function, user data, FPS (0 to use browser requestAnimationFrame mechanism), simulate infinite loop
+  game_logic::offline logic;                                                    // game logic: offline local AI
+
+  game_state state{                                                             // package references to game state for the loops
+    window,
+    logic
+  };
+  emscripten_set_main_loop_arg(&loop_select_difficulty, &state, 0, true);       // loop function, user data, FPS (0 to use browser requestAnimationFrame mechanism), simulate infinite loop
 
   std::unreachable();                                                           // execution never returns to this point
 }
 
 
 void loop_select_difficulty(void *data) {
-  // TODO
+  /// UI loop to prompt user to select game difficulty
+  auto &state{*static_cast<game_state*>(data)};
+
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplGlfw_NewFrame();
+  ImGui::NewFrame();
+
+  bool move_to_main_loop{false};
+
+  ImGui::SetNextWindowSize(ImVec2(200, -FLT_MIN), ImGuiCond_FirstUseEver);
+  ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f)); // set next window position in the centre of the frame, use pivot=(0.5f,0.5f) to center on given point, etc.
+  if(ImGui::Begin("Select Difficulty", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse)) {
+    // TODO: number of rounds to play
+
+    magic_enum::enum_for_each<game_logic::difficulty_type>([&](game_logic::difficulty_type difficulty) {
+      std::string difficulty_name{magic_enum::enum_name(difficulty)};           // derive difficulty name from enum name
+      difficulty_name[0] = static_cast<char>(std::toupper(difficulty_name[0])); // capitalise first letter of the difficulty name
+      if(ImGui::Button(difficulty_name.c_str())) {                              // difficulty select button
+        state.logic.set_difficulty(difficulty);                                 // set the difficulty in the game logic engine
+        move_to_main_loop = true;                                               // proceed to the main loop
+      }
+      if(ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled | ImGuiHoveredFlags_DelayNormal)) {
+        ImGui::SetTooltip(state.logic.difficulty_description(difficulty).c_str(), "%s"); // set tooltip to describe the difficulty relevant to the active logic engine
+      }
+    });
+  }
+  ImGui::End();
+
+  ImGui::Render();
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+  glfwSwapBuffers(state.window.glfw_window);
+
+  if(move_to_main_loop) {
+    emscripten_cancel_main_loop();
+    emscripten_set_main_loop_arg(&loop_player_move, &state, 0, true);           // loop function, user data, FPS (0 to use browser requestAnimationFrame mechanism), simulate infinite loop
+  }
 }
 
-void loop_main(void *data) {
-  // TODO
+void loop_player_move(void *data) {
+  auto &state{*static_cast<game_state*>(data)};
+
+  enum class next_loop_type {
+    continue_this,
+    opponent_move,
+    select_difficulty
+  } next_loop = next_loop_type::continue_this;                                  // where to direct logic flow after this loop is finished
+
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplGlfw_NewFrame();
+  ImGui::NewFrame();
+
+  ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f)); // set next window position in the centre of the frame, use pivot=(0.5f,0.5f) to center on given point, etc.
+  if(ImGui::Begin("Choose your move", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse)) {
+    magic_enum::enum_for_each<game_logic::move_type>([&](game_logic::move_type move) {
+      std::string move_name{magic_enum::enum_name(move)};                       // derive move name from enum name
+      move_name[0] = static_cast<char>(std::toupper(move_name[0]));             // capitalise first letter of the name
+      if(ImGui::Button(move_name.c_str())) {                                    // select move button
+        state.logic.process();                                                  // calculate the next move
+        state.logic.player_move(move);                                          // declare the player move
+        next_loop = next_loop_type::opponent_move;                              // opponent's turn
+      }
+      if(ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled | ImGuiHoveredFlags_DelayNormal)) {
+        ImGui::SetTooltip(game_logic::describe_move(move).c_str(), "%s");       // set tooltip to describe the behaviour of the move
+      }
+      ImGui::SameLine();
+    });
+    ImGui::NewLine();
+  }
+  ImGui::End();
+
+  ImGui::Render();
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+  glfwSwapBuffers(state.window.glfw_window);
+
+  switch(next_loop) {
+  case next_loop_type::opponent_move:
+    emscripten_cancel_main_loop();
+    emscripten_set_main_loop_arg(&loop_opponent_move, &state, 0, true);
+    break;
+  case next_loop_type::select_difficulty:
+    emscripten_cancel_main_loop();
+    emscripten_set_main_loop_arg(&loop_select_difficulty, &state, 0, true);
+    break;
+  case next_loop_type::continue_this:
+    // continue this loop
+  }
+}
+
+void loop_opponent_move(void *data) {
+  auto &state{*static_cast<game_state*>(data)};
+
+  enum class next_loop_type {
+    continue_this,
+    player_move,
+    select_difficulty
+  } next_loop = next_loop_type::continue_this;                                  // where to direct logic flow after this loop is finished
+
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplGlfw_NewFrame();
+  ImGui::NewFrame();
+
+  ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f)); // set next window position in the centre of the frame, use pivot=(0.5f,0.5f) to center on given point, etc.
+  if(ImGui::Begin("Your opponent's move", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse)) {
+    auto opponent_move{state.logic.get_last_opponent_move()};
+    ImGui::TextUnformatted(("Your opponent's move: " + std::string{magic_enum::enum_name(opponent_move)} + "!").c_str());
+    auto verdict{state.logic.get_last_verdict()};
+    ImGui::TextUnformatted(("Result: " + std::string{magic_enum::enum_name(verdict)}).c_str());
+
+    if(ImGui::Button("Continue")) {
+      next_loop = next_loop_type::player_move;                                  // proceed to the player's turn
+    }
+    if(ImGui::Button("Change difficulty")) {
+      next_loop = next_loop_type::select_difficulty;                            // proceed to the difficulty select loop
+    }
+  }
+  ImGui::End();
+
+  ImGui::Render();
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+  glfwSwapBuffers(state.window.glfw_window);
+
+  switch(next_loop) {
+  case next_loop_type::player_move:
+    emscripten_cancel_main_loop();
+    emscripten_set_main_loop_arg(&loop_player_move, &state, 0, true);
+    break;
+  case next_loop_type::select_difficulty:
+    emscripten_cancel_main_loop();
+    emscripten_set_main_loop_arg(&loop_select_difficulty, &state, 0, true);
+    break;
+  case next_loop_type::continue_this:
+    // continue this loop
+  }
 }
