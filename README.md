@@ -39,6 +39,8 @@ To build in release mode, just do:
 CMAKE_BUILD_TYPE=Release ./build.sh
 ```
 
+Additionally, a project and workspace are provided for Code::Blocks IDE - this is not necessary to build or run, but provided for convenience.  Its build simply calls the build script.
+
 ### Running
 To run the program, it should be hosted on a webserver - opening the html file in a local browser will not work.  Emscripten provides the `emrun` helper to run a minimal local webserver, and there is an optional run script provided, to help executing this.  Again, the script is not necessary, but provides extra convenience.
 
@@ -73,6 +75,8 @@ The render canvas window is managed by GLFW3.  Fast OpenGL-accelerated GUI graph
 
 In order to maintain modularity and reduce the number of hard-coded strings, move names ("rock", "paper", "scissors") and verdicts ("win", "draw", "lose") are automatically derived from their enum names by `magic_enum`.  Iteration over enums is also provided by this handy library, so the move buttons are dynamically generated from the enums - simply add another move type, and a new button will appear without manual intervention.  Longer verbal descriptions are still specified manually, but are kept to a minimum.
 
+The GUI is provided by ImGUI - an immediate-mode GUI (see https://github.com/ocornut/imgui/wiki/About-the-IMGUI-paradigm) which allows for dynamic GUI design closely coupled to program logic, with the minimum of boiler-plate - it is ideal for a compact project such as this one.  The trade-off is that there is limited separation of concerns between graphical layout and logic that results from interactions with the GUI; as such the code in `game_loops.cpp` is inevitably a blend of GUI setup and game logic.  Larger blocks of pure GUI setup have been abstracted out into functionality in the `gui/` directory where possible, but this is limited - this tradeoff was made with the intention of keeping the code compact while delivering a lot of functionality.
+
 ### Oddities
 There are a few unusual details that arise as a result of using Emscripten that are worth mentioning.
 
@@ -100,6 +104,37 @@ Release builds strip all of this and run a closure compiler on the javascript, m
 When you choose "Hard" difficulty, the "offline" game logic selects a modified strategy, `game_logic/strategy/wang_et_al_2014_mod1.h` / `.cpp`.  Wang et al's strategy can be taken advantage of if it is understood by the player, in its predictability.  This modified strategy attempts to detect and defeat prediction attacks - if the player defeated the Wang et al strategy the last two rounds, this strategy makes a random move instead of following the Wang et al strategy next.
 
 Intentionally losing at Rock Paper Scissors is actually just as difficult as intentionally winning.  The "Easy" difficulty applies a simple inversion of the Wang et al strategy (detailed in `wang_et_al_2014_inverse.h` / `.cpp`), which plays the losing move instead of the winning move as dictated by the Wang strategy at every point.  It does not include a random element, and can be predicted and relatively easily defeated once the pattern is observed.
+
+## Project structure
+The key parts of the project are laid out as follows:
+
+- `├── assets/` - Embedded assets - one PNG texture atlas image
+- `├── game_logic/` - Modular game logic
+- `│   └── strategy/` - Modular strategies used by the game logic
+- `├── gui/` - Functionality managing the GUI and providing higher-level graphical components.
+- `├── html/` - The HTML "shell" skeleton page template, used by Emscripten to produce the HTML page in `build`.
+- `├── include/` - Third-party libraries
+- `├── render/` - Functionality for low-level graphics rendering outside the scope of the GUI
+- `├── resources/` - Files to be deployed to the webserver directory for browser access - in this case, just the `favicon.ico`
+- `├── game_loops.*` - Implementation of each of the game's stages as pseudo-loops
+- `├── game_state.*` - Game state shared between game loops
+- `├── imconfig.h` - ImGUI library configuration
+- `├── main.cpp` - Entry point
+- `├── README.md` - This document
+- `├── CMakeLists.txt` - CMake build definitions
+- `├── build.sh` - build script
+- `├── run.sh` - run script
+- `├── rps.workspace` - Code::Blocks project workspace
+- `├── client.cbp` - Code::Blocks project workspace
+- `├── generate_git_version.sh` - auto-versioning helper
+- `├── get_version.*` - auto-versioning accessors
+- `├── git_version.h` - auto-version data
+- `└── version.h` - auto-version data
+
+Total source size, including all necessary boilerplate, excluding libraries and optional scripts, is 1677 lines, 79kB.
+
+The compiled release build is 796KB including HTML and javascript glue.
+
 
 ## Libraries used
 - [Boost](https://www.boost.org/)
