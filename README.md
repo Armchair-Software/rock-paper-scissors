@@ -39,7 +39,7 @@ To build in release mode, just do:
 CMAKE_BUILD_TYPE=Release ./build.sh
 ```
 
-Additionally, a project and workspace are provided for Code::Blocks IDE - this is not necessary to build or run, but provided for convenience.  Its build simply calls the build script.
+Additionally, a project and workspace are provided for Code::Blocks IDE - this is not necessary to build or run, but provided for convenience.  Its build simply calls the build script.  This also manages autoversioning with `version.h`, which is again optional.  The file `version.h` can be managed manually.
 
 ### Running
 To run the program, it should be hosted on a webserver - opening the html file in a local browser will not work.  Emscripten provides the `emrun` helper to run a minimal local webserver, and there is an optional run script provided, to help executing this.  Again, the script is not necessary, but provides extra convenience.
