@@ -70,8 +70,6 @@
 		<Unit filename="render/window.cpp" />
 		<Unit filename="render/window.h" />
 		<Unit filename="run.sh" />
-		<Unit filename="shader_load.cpp" />
-		<Unit filename="shader_load.h" />
 		<Unit filename="version.h" />
 		<Extensions>
 			<AutoVersioning>

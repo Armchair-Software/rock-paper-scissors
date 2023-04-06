@@ -107,7 +107,6 @@ add_executable(client
   render/window.cpp
   # shared libraries:
   get_version.cpp
-  shader_load.cpp
   # 3rd party libraries:
   include/imgui/imgui.cpp
   include/imgui/imgui_demo.cpp
