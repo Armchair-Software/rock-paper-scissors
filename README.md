@@ -89,6 +89,9 @@ For the same reasons, execution flow can never return after a loop has been disp
 #### No exceptions
 Although there is progress with C++ exceptions in WASM, currently support is patchy, and the most common emulation method produces a significant performance impact on the code.  Therefore exception handling is disabled in this project.  In a handful of places where exceptions cannot be usefully replaced with another paradigm, in case of errors during initialisation of the graphics systems, the program will `abort()`.
 
+#### Unit tests absent
+It is relatively complex to set up a unit test system for a program of this sort running under Emscripten; either multiple build configurations are needed, to run unit tests outside of the browser - which has the limitation that the test environment may differ significantly from the wasm environment - or a method needs to be used to execute and obtain results from tests inside a live browser.  I have decided to omit tests entirely from this project to keep its size reasonable, but a production program of this sort would use one or both of the aforementioned solutions.
+
 #### Debugging & profiling
 Debugging messages are printed to the browser console - press F12 to see them.
 
