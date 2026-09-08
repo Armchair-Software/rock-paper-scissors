@@ -1,6 +1,7 @@
 #include "game_loops.h"
 #include <imgui/imgui.h>
 #include <magic_enum.hpp>
+#include <magic_enum_utility.hpp>
 #include "game_state.h"
 #include "render/scene.h"
 #include "gui/gui.h"
