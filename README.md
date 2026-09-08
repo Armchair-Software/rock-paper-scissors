@@ -9,6 +9,8 @@ The fundamental architecture is a C++23 program compiled to WebAssembly with Ems
 
 This document covers how to build it and get it to run, the tech I used and rationale for the design decisions I made, and documentation of the project structure.
 
+Live demo: https://armchair-software.github.io/rock-paper-scissors/
+
 ## Building
 The project is intended to be built on Linux.  It may build elsewhere there is a posix toolchain and working Emscripten configuration, but this is not tested.
 
