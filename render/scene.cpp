@@ -47,22 +47,18 @@ void scene::draw(game_state &state) const {
   auto const hand_coord_player{hand_start_coord_player.lerp(hand_travel_player, hand_destination_coord_player)};
 
   ImGui::SetCursorPos(hand_coord_opponent);
-  ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(state.textures.texture_atlas)), // safe path to convert integer OpenGL handle to a void pointer
+  ImGui::Image(state.textures.texture_atlas,                                    // safe path to convert integer OpenGL handle to a void pointer
                image_size,                                                      // image size
                state.textures.subtextures[opponent_texture_id].min,             // uv0
-               state.textures.subtextures[opponent_texture_id].max,             // uv1
-               ImVec4(1, 1, 1, 1),                                              // tint colour
-               ImVec4(0, 0, 0, 0));                                             // border colour
+               state.textures.subtextures[opponent_texture_id].max);            // uv1
 
   ImGui::SetCursorPos(hand_coord_player);
   auto const uv0_mirror{vec2f{state.textures.subtextures[player_texture_id].max.x, state.textures.subtextures[player_texture_id].min.y}};
   auto const uv1_mirror{vec2f{state.textures.subtextures[player_texture_id].min.x, state.textures.subtextures[player_texture_id].max.y}};
-  ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(state.textures.texture_atlas)), // safe path to convert integer OpenGL handle to a void pointer
+  ImGui::Image(state.textures.texture_atlas,                                    // safe path to convert integer OpenGL handle to a void pointer
                image_size,                                                      // image size
                uv0_mirror,                                                      // uv0
-               uv1_mirror,                                                      // uv1
-               ImVec4(1, 1, 1, 1),                                              // tint colour
-               ImVec4(0, 0, 0, 0));                                             // border colour
+               uv1_mirror);                                                     // uv1
 
   ImGui::End();
 }
