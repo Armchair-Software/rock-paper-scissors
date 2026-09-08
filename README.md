@@ -1,3 +1,6 @@
+[![CI Build](https://github.com/Armchair-Software/rock-paper-scissors/actions/workflows/ci-build.yml/badge.svg)](https://github.com/Armchair-Software/rock-paper-scissors/actions/workflows/ci-build.yml)
+[![GitHub Pages deploy](https://img.shields.io/github/deployments/Armchair-Software/rock-paper-scissors/github-pages?label=deploy)](https://armchair-software.github.io/rock-paper-scissors/)
+
 # Rock Paper Scissors
 
 A WebGL / Emscripten interpretation of an interactive rock, paper, scissors game.
