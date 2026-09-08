@@ -32,7 +32,6 @@ if(build_type STREQUAL "debug")
     # debugging
     -g3
     --profiling-funcs
-    -sDEMANGLE_SUPPORT=1
     # ensure fast link in debug mode: https://emscripten.org/docs/optimizing/Optimizing-Code.html#link-times
     -sERROR_ON_WASM_CHANGES_AFTER_LINK
   )
