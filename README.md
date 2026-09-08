@@ -1,6 +1,6 @@
-# Rock Paper Scissors for IMC by Eugene Hopkinson
+# Rock Paper Scissors
 
-This is my interpretation of an interactive rock, paper, scissors game.
+A WebGL / Emscripten interpretation of an interactive rock, paper, scissors game.
 
 The fundamental architecture is a C++23 program compiled to WebAssembly with Emscripten, running in the browser, rendering graphics with WebGL2.
 
