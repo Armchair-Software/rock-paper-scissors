@@ -184,7 +184,6 @@ target_link_options(client PRIVATE
   -lwebsocket.js
   --bind
   -sALLOW_MEMORY_GROWTH=1
-  -sWASM_BIGINT
   -sELIMINATE_DUPLICATE_FUNCTIONS=1
   -sUSE_GLFW=3
   -sMIN_WEBGL_VERSION=2
