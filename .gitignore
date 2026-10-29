@@ -1,9 +1,10 @@
-# build artifacts
-build
-build_rel
-
-# Git auto-versioning
-git_version.h
-
-# Code::Blocks generated files
+obj
+bin
+*.depend
 *.layout
+config.ini
+Thumbs.db
+.DS_Store
+git_version.h
+libvoxelstorm_update.lock
+.codex
