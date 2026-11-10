@@ -1,10 +1,9 @@
-obj
-bin
-*.depend
-*.layout
-config.ini
-Thumbs.db
-.DS_Store
+# build artifacts
+build
+build_rel
+
+# Git auto-versioning
 git_version.h
-libvoxelstorm_update.lock
-.codex
+
+# Code::Blocks generated files
+*.layout
