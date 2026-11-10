@@ -1,4 +1,5 @@
 #include "gui.h"
+#include <vector>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 #include <vectorstorm/vector/vector3.h>
