@@ -1,8 +1,8 @@
 #ifndef GAME_LOGIC_STRATEGY_WANG_ET_AL_2014_H_INCLUDED
 #define GAME_LOGIC_STRATEGY_WANG_ET_AL_2014_H_INCLUDED
 
-#include <vector>
 #include "strategy_base.h"
+#include <vector>
 
 namespace game_logic::strategy {
 
